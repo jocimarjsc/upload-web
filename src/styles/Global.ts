@@ -11,7 +11,15 @@ const GlobalStyled = createGlobalStyle`
     
     body {
         font-family: 'Inter', sans-serif;
+        text-rendering: optimizeLegibility;
+        -webkit-font-font-smoothing: antialiased;
+
+        background: linear-gradient(118.5deg, #8D65FF -1.84%, #A2DDFF 112.15%);
     }
+
+    html, body, #root {
+        height: 100vh;
+    } 
 `;
 
 export { GlobalStyled }
