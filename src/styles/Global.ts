@@ -1,8 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyled = createGlobalStyle`
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-
     *{
         margin: 0;
         padding: 0;
@@ -18,8 +16,27 @@ const GlobalStyled = createGlobalStyle`
     }
 
     html, body, #root {
-        height: 100vh;
+        width: 100%;
+        height: 100%;
+        
     } 
+
+    @media(max-width: 1080px) {
+        html {
+            font-size: 93.75%;
+        }
+    }
+
+    @media(max-width: 1366px) {
+        html {
+            font-size: 87.5%;
+    }
+    }
+    @media(max-width: 768px) {
+        html {
+            font-size: 81.25%;
+        }
+    }
 `;
 
 export { GlobalStyled }
