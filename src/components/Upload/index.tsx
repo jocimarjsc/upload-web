@@ -40,7 +40,7 @@ function Upload({ onUpload }: onUpload) {
         <span>Images should be jpg, jpeg, png e gif</span>
       </Header>
 
-      <DropZone accept="image/*" onDropAccepted={onUpload}>
+      <DropZone accept="image/*" onDropAccepted={onUpload} >
         {({ getRootProps, getInputProps, isDragActive, isDragReject }) => (
           <DragDrop
             {...getRootProps()}

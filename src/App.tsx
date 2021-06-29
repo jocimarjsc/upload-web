@@ -7,74 +7,65 @@ import { Upload } from "./components/Upload";
 import { ListUplods } from "./components/ListUplods";
 import { useState } from "react";
 import { api } from "./services/api";
-
-interface uploadImage {
-  name: string;
-  path: string;
-  size: number;
-  type: string;
-}
+import { useEffect } from "react";
 
 interface filesUploads {
-  file: uploadImage;
-    id: string;
-    name: string;
-    readableSize: string;
-    preview: string;
-    progress: number;
-    uploaded: boolean;
-    error: boolean;
-    url?: string
+  uniqueFile: File[];
+  id: string;
+  name: string;
+  readableSize: string;
+  preview: string;
+  progress: number;
+  uploaded: boolean;
+  error: boolean;
+  url?: string
 }
 
 function App() {
-  const [uploadsFiles, setUploadsFiles] = useState<filesUploads[]>([]);
+  const [files, setFiles] = useState<filesUploads[]>([]);
+  const [progress, setProgress] = useState(0);
+  const [uploaded, setUploaded] = useState(false);
+  const [error, setError] = useState(false);
+  const [url, setUrl] =useState(null);
+
 
   function HandleUpload( file: any) {
-    const uploadFile = file.map( (file: uploadImage) => ({
-      file,
-      id: uniqueId(),
-      name: file.name,
-      readableSize: filesize(file.size),
-      preview: URL.createObjectURL(file),
-      progress: 99,
-      uploaded: false,
-      error: false,
-      url: null
-    }));
-    
-    setUploadsFiles(uploadsFiles.concat(uploadFile));
-    
-    uploadsFiles.forEach(processUpload);
-    
+    const data = file.map((upload: File) => ({
+      uniqueFile: upload,
+      id: uniqueId().toString(),
+      name: upload.name,
+      readableSize: filesize(upload.size),
+      preview: URL.createObjectURL(upload),
+      progress,
+      uploaded,
+      error,
+      url,
+    }))
+    setFiles(data)
+
   };
 
-  function processUpload(uploadFile: any) {
+  files.forEach((upload: any) => {
     const data = new FormData();
-    
-    data.append("file", uploadFile.file, uploadFile.name);
+
+    data.append("file", upload.uniqueFile);
 
     api.post("/uploads", data, {
       onUploadProgress: e => {
-        const loaded = parseInt(e.loaded);
-        const total = parseInt(e.total);
-        const progress = Math.round((loaded * 100) / total);
-        
-        updateFile(uploadFile.id, {
-          progress
-        });
+        const progress = Math.round((parseInt(e.loaded) * 100) / parseInt(e.total));
+        setProgress(progress)
       }
+    }).then((file: any) => {
+      setUploaded(true);
+      setUrl(file.url)
+    }).catch(() => {
+      setError(true)
     })
+  })
+
+  function processUpload () {
+    
   }
-
-  function updateFile(id:string, data: any) {
-    uploadsFiles.map((uploadedFile: any) => {
-      return id === uploadedFile.id
-        ? { ...uploadedFile, ...data}
-        : uploadedFile;
-    })
-  };
-
   return (
     <>
     <Container>
@@ -82,8 +73,8 @@ function App() {
         <Upload
           onUpload={HandleUpload}
         />
-        {!! uploadsFiles.length && (
-          <ListUplods files={uploadsFiles} />
+        {!! files.length && (
+          <ListUplods files={files} onDelete={() => {}} />
         )}
         
       </Content>

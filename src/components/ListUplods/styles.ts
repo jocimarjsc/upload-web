@@ -9,7 +9,7 @@ export const Uploaded = styled.div`
 
 
     h2 {
-        font-size: 1.2rem;
+        font-size: 1rem;
         color: #808080;
         font-weight: 400;
         margin-bottom: .5rem;

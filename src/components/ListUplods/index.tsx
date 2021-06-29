@@ -16,34 +16,13 @@ import checked from "../../assets/checked.json";
 import warning from "../../assets/warning.json";
 import share from "../../assets/share.json";
 
-interface uploadImage {
-  lastModified: number;
-  name: string;
-  path: string;
-  size: number;
-  type: string;
-  webkitRelativePath: any;
-  lastModifiedDate: any;
-}
-
-interface filesUploads {
-  file: uploadImage;
-  id: string;
-  name: string;
-  readableSize: string;
-  preview: string;
-  progress: number;
-  uploaded: boolean;
-  error: boolean;
-  url?: string;
-}
-function ListUplods({ files }: any) {
+function ListUplods({ files, onDelete }: any) {
   return (
     <Uploaded>
       <h2>Uploaded Images</h2>
 
       <ListUpload>
-        {files.map((prop: filesUploads) => (
+        {files.map((prop: any) => (
           <Uploads key={prop.id}>
             <Preview src={prop.preview} />
             <Info>
@@ -55,7 +34,7 @@ function ListUplods({ files }: any) {
               />
               <Footer className="footer">
                 <span>{prop.readableSize}</span>
-                <button>Excluir</button>
+                <button onClick={() => onDelete(prop.id)}>Excluir</button>
               </Footer>
             </Info>
 
